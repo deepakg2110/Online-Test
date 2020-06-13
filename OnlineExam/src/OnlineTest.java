@@ -1,4 +1,3 @@
- 
 import java.awt.*;  
 import java.awt.event.*;  
 import javax.swing.*;  
@@ -9,7 +8,7 @@ class OnlineTest extends JFrame implements ActionListener
     JRadioButton jb[]=new JRadioButton[5];  
     JButton b1,b2;  
     ButtonGroup bg;  
-    int count=0,current=0;  
+    int count=0,current=0,x=1,y=1,now=0;  
     int m[]=new int[10];      
     OnlineTest(String s)  
     {  
@@ -24,7 +23,7 @@ class OnlineTest extends JFrame implements ActionListener
             bg.add(jb[i]);  
         }  
         b1=new JButton("Next");  
-        b2=new JButton("Result");  
+        b2=new JButton("Later");  
         b1.addActionListener(this);  
         b2.addActionListener(this);  
         add(b1);add(b2);  
@@ -56,17 +55,44 @@ class OnlineTest extends JFrame implements ActionListener
                 b2.setText("Result");  
             }  
         }  
-
+        if(e.getActionCommand().equals("Later"))  
+        {  
+            JButton bk=new JButton("Bookmark"+x);  
+            bk.setBounds(480,20+30*x,100,30);  
+            add(bk);  
+            bk.addActionListener(this);  
+            m[x]=current;  
+            x++;  
+            current++;  
+            set();    
+            if(current==9)  
+                b2.setText("Result");  
+            setVisible(false);  
+            setVisible(true);  
+        }  
+        for(int i=0,y=1;i<x;i++,y++)  
+        {  
+        if(e.getActionCommand().equals("Bookmark"+y))  
+        {  
+            if(check())  
+                count=count+1;  
+            now=current;  
+            current=m[y];  
+            set();  
+            ((JButton)e.getSource()).setEnabled(false);  
+            current=now;  
+        }  
+        }  
       
         if(e.getActionCommand().equals("Result"))  
         {  
             if(check())  
                 count=count+1;  
-            current++;  
+            current++;   
             JOptionPane.showMessageDialog(this,"correct ans="+count);  
             System.exit(0);  
         }  
-    }  
+    }   
     void set()  
     {  
         jb[4].setSelected(true);  
